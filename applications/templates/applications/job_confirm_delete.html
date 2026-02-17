@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Delete</title>
+</head>
+<body>
+    <h2>Are you absolutely sure?</h2>
+    
+    <p>You are about to delete your application for <strong>{{ job.role_title }}</strong> at <strong>{{ job.company_name }}</strong>.</p>
+    <p>This action cannot be undone.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="color: red;">Yes, Delete It</button>
+    </form>
+    
+    <br>
+    <a href="{% url 'job_list' %}">Cancel and go back</a>
+</body>
+</html>

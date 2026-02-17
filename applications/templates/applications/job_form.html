@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Job</title>
+</head>
+<body>
+    <h2>Add a New Job Application</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit">Save Job</button>
+    </form>
+    
+    <br>
+    <a href="{% url 'job_list' %}">Cancel</a>
+</body>
+</html>
