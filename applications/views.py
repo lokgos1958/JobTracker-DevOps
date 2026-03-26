@@ -35,7 +35,7 @@ def add_job(request):
 
 @login_required
 def edit_job(request, pk):
-    job = get_object_or_404(JobApplication, pk=pk)
+    job = get_object_or_404(JobApplication, pk=pk, user=request.user)
 
     if request.method == 'POST':
       
@@ -51,7 +51,7 @@ def edit_job(request, pk):
 
 @login_required
 def delete_job(request, pk):
-    job = get_object_or_404(JobApplication, pk=pk)
+    job = get_object_or_404(JobApplication, pk=pk, user=request.user)
     
     if request.method == 'POST':
         job.delete() 
