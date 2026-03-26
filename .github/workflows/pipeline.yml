@@ -1,19 +1,48 @@
-- name: Install dependencies
-  run: |
-    pip install -r requirements.txt
-    pip install flake8 bandit
+name: Django CI
 
-- name: Run Django checks
-  run: |
-    python manage.py check
-    python manage.py makemigrations --check --dry-run
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
-- name: Run tests
-  run: |
-    python manage.py test
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-- name: Run flake8
-  run: flake8 .
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-- name: Run bandit
-  run: bandit -r .
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 bandit pip-audit
+
+      - name: Run Django checks
+        env:
+          SECRET_KEY: test-secret-key
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+
+      - name: Run tests
+        env:
+          SECRET_KEY: test-secret-key
+        run: |
+          python manage.py test
+
+      - name: Run flake8
+        run: flake8 .
+
+      - name: Run bandit
+        run: bandit -r .
+
+      - name: Run pip-audit
+        run: pip-audit
