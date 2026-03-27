@@ -18,14 +18,45 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='JobApplication',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('company_name', models.CharField(max_length=100)),
-                ('role_title', models.CharField(max_length=100)),
-                ('job_link', models.URLField()),
-                ('status', models.CharField(choices=[('APPLIED', 'Applied'), ('INTERVIEW', 'Interview Scheduled'), ('OFFER', 'Offer Received'), ('REJECTED', 'Rejected')], default='APPLIED', max_length=20)),
-                ('date_applied', models.DateField(default=django.utils.timezone.now)),
-                ('notes', models.TextField(blank=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('id',
+                 models.BigAutoField(
+                     auto_created=True,
+                     primary_key=True,
+                     serialize=False,
+                     verbose_name='ID')),
+                ('company_name',
+                 models.CharField(
+                     max_length=100)),
+                ('role_title',
+                 models.CharField(
+                     max_length=100)),
+                ('job_link',
+                 models.URLField()),
+                ('status',
+                 models.CharField(
+                     choices=[
+                         ('APPLIED',
+                          'Applied'),
+                         ('INTERVIEW',
+                          'Interview Scheduled'),
+                         ('OFFER',
+                          'Offer Received'),
+                         ('REJECTED',
+                          'Rejected')],
+                     default='APPLIED',
+                     max_length=20)),
+                ('date_applied',
+                 models.DateField(
+                     default=django.utils.timezone.now)),
+                ('notes',
+                 models.TextField(
+                     blank=True)),
+                ('user',
+                 models.ForeignKey(
+                     blank=True,
+                     null=True,
+                     on_delete=django.db.models.deletion.CASCADE,
+                     to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

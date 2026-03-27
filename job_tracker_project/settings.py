@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 """
 Django settings for job_tracker_project project.
 
@@ -10,7 +13,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ind*$*ui&$vrsf_k0iqzcfeyh)sm3sjk_t0h2v*gd5ehnk@b)7'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
 DEBUG = True
-
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']  # later replace with your Render URL
 
 # Application definition
 
@@ -117,5 +117,5 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_REDIRECT_URL = 'job_list'  
+LOGIN_REDIRECT_URL = 'job_list'
 LOGOUT_REDIRECT_URL = 'home'
