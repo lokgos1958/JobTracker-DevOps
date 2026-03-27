@@ -31,6 +31,7 @@ jobs:
       - name: Run Django checks
         env:
           SECRET_KEY: test-secret-key
+          DEBUG: "False"
         run: |
           python manage.py check
           python manage.py makemigrations --check --dry-run
@@ -38,14 +39,18 @@ jobs:
       - name: Run tests
         env:
           SECRET_KEY: test-secret-key
+          DEBUG: "False"
         run: |
           python manage.py test
 
-      - name: Run flake8
-        run: flake8 . --count --statistics
-
       - name: Run bandit
-        run: bandit -r . -x ./venv
+        run: |
+          bandit -r . -x ./venv,./applications/migrations
 
       - name: Run pip-audit
-        run: pip-audit
+        run: |
+          pip-audit
+
+      - name: Run flake8
+        run: |
+          python -m flake8 .
