@@ -1,48 +1,108 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | JobTracker</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h2>My Job Applications</h2>
-    <p>Welcome, {{ user.username }}!</p> <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Log Out</button>
-    </form>
-    <a href="{% url 'add_job' %}">+ Add New Job</a>
-    <hr>
+    <nav class="navbar">
+        <div class="nav-brand">JobTracker</div>
+        <div class="nav-links">
+            <a href="{% url 'add_job' %}" class="btn btn-primary">+ Add My Job</a>
+            <a href="{% url 'home' %}" class="btn btn-outline">Home</a>
+        </div>
+    </nav>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Company</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Link</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for job in jobs %}
-            <tr>
-                <td>{{ job.company_name }}</td>
-                <td>{{ job.role_title }}</td>
-                <td>{{ job.get_status_display }}</td>
-                <td><a href="{{ job.job_link }}" target="_blank">View Job</a></td>
-                <td>
-                     <a href="{% url 'edit_job' job.pk %}">Edit</a>
-                    <a href="{% url 'delete_job' job.pk %}" style="color: red;">Delete</a>
-                </td>
-           
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No applications found. Time to apply!</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <br>
-    <a href="{% url 'home' %}">Back to Home</a>
+    <div class="container dashboard-page">
+        <section class="dashboard-hero">
+            <div>
+                <h1>Welcome back, {{ user.username }}</h1>
+                <p>Your personal dashboard for managing job applications and tracking progress.</p>
+            </div>
+
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline">Log Out</button>
+            </form>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>Logged in as</h3>
+                <p>{{ user.username }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Account Type</h3>
+                <p>
+                    {% if user.is_superuser %}
+                        Admin
+                    {% else %}
+                        User
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Applications</h3>
+                <p>{{ jobs|length }}</p>
+            </div>
+        </section>
+
+        <section class="table-card">
+            <div class="table-header">
+                <div>
+                    <h2>{{ user.username }}'s Job Dashboard</h2>
+                    <p>You can add, update, and manage only your own job applications.</p>
+                </div>
+                <a href="{% url 'add_job' %}" class="btn btn-primary">Add My Job</a>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Applied On</th>
+                            <th>Job Link</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                        <tr>
+                            <td>{{ job.company_name }}</td>
+                            <td>{{ job.role_title }}</td>
+                            <td>
+                                <span class="status-badge status-{{ job.status|lower }}">
+                                    {{ job.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ job.date_applied }}</td>
+                            <td>
+                                <a href="{{ job.job_link }}" target="_blank" class="table-link">View Job</a>
+                            </td>
+                            <td class="action-buttons">
+                                <a href="{% url 'edit_job' job.pk %}" class="btn btn-outline btn-small">Edit</a>
+                                <a href="{% url 'delete_job' job.pk %}" class="btn btn-danger btn-small">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                No applications found yet. Start by adding your first job.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 </body>
 </html>

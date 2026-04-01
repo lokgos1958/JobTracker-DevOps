@@ -1,20 +1,66 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Job</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Edit Job{% else %}Add Job{% endif %} | JobTracker</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h2>Add a New Job Application</h2>
-    
-    <form method="post">
-        {% csrf_token %}
-        
-        {{ form.as_p }}
-        
-        <button type="submit">Save Job</button>
-    </form>
-    
-    <br>
-    <a href="{% url 'job_list' %}">Cancel</a>
+    <nav class="navbar">
+        <div class="nav-brand">JobTracker</div>
+        <div class="nav-links">
+            <a href="{% url 'job_list' %}" class="btn btn-outline">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>{% if form.instance.pk %}Edit Job Application{% else %}Add Job Application{% endif %}</h2>
+            <p class="subtitle">This application will be saved under your account: <strong>{{ user.username }}</strong></p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    {{ form.company_name.label_tag }}
+                    {{ form.company_name }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.role_title.label_tag }}
+                    {{ form.role_title }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.job_link.label_tag }}
+                    {{ form.job_link }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.status.label_tag }}
+                    {{ form.status }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.date_applied.label_tag }}
+                    {{ form.date_applied }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.notes.label_tag }}
+                    {{ form.notes }}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        {% if form.instance.pk %}Update Job{% else %}Save Job{% endif %}
+                    </button>
+                    <a href="{% url 'job_list' %}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
