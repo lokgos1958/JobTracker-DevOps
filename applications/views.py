@@ -7,7 +7,7 @@ from .models import JobApplication
 
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'applications/home.html')
 
 
 @login_required
